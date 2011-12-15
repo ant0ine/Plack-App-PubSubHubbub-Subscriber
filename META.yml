@@ -1,0 +1,21 @@
+---
+abstract: 'PubSubHubbub subscriber implementation as a Plack App'
+author:
+  - 'Antoine Imbert <antoine.imbert@gmail.com>'
+build_requires:
+  HTTP::Message: 0
+  LWP: 0
+  Plack: 0
+  Test::Exception: 0
+  Test::More: 0
+  URI: 0
+dynamic_config: 0
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112150'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Plack-App-PubSubHubbub-Subscriber
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.1

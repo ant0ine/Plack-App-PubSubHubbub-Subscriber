@@ -11,3 +11,4 @@ t/00-load.t
 t/01-config.t
 t/02-basics.t
 t/03-client.t
+Makefile.PL

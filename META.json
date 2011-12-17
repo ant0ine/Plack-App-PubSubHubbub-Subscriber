@@ -3,7 +3,7 @@
    "author" : [
       "Antoine Imbert <antoine.imbert@gmail.com>"
    ],
-   "dynamic_config" : 0,
+   "dynamic_config" : 1,
    "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.112150",
    "license" : [
       "perl_5"
@@ -23,18 +23,39 @@
             "Test::More" : 0,
             "URI" : 0
          }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.38"
+         }
+      }
+   },
+   "provides" : {
+      "Plack::App::PubSubHubbub::Subscriber" : {
+         "file" : "lib/Plack/App/PubSubHubbub/Subscriber.pm",
+         "version" : "0.1"
+      },
+      "Plack::App::PubSubHubbub::Subscriber::Client" : {
+         "file" : "lib/Plack/App/PubSubHubbub/Subscriber/Client.pm",
+         "version" : 0
+      },
+      "Plack::App::PubSubHubbub::Subscriber::Config" : {
+         "file" : "lib/Plack/App/PubSubHubbub/Subscriber/Config.pm",
+         "version" : 0
       }
    },
    "release_status" : "stable",
    "resources" : {
       "license" : [
          "http://dev.perl.org/licenses/"
-      ],
-      "repository" : {
-         "url" : "git://github.com/ant0ine/Plack-App-PubSubHubbub-Subscriber.git",
-         "web" : "http://github.com/ant0ine/Plack-App-PubSubHubbub-Subscriber",
-         "type" : "git"
-      }
+      ]
    },
-   "version" : "0.1"
+   "version" : "0.1",
+   "x_resource" : {
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/ant0ine/Plack-App-PubSubHubbub-Subscriber.git",
+         "web" : "http://github.com/ant0ine/Plack-App-PubSubHubbub-Subscriber"
+      }
+   }
 }

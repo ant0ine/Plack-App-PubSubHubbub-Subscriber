@@ -97,11 +97,11 @@ sub callback_path {
 sub call {
     my($self, $env) = @_;
     my $req = Plack::Request->new($env);
+    my $token = $self->config->token_in_path ?
+        extract_token($req) : undef;
 
     if ($req->method eq 'POST') {
         if (my $ping_cb = $self->on_ping) {
-            my $token = $self->config->token_in_path ?
-                extract_token($req) : undef;
             $ping_cb->($req->content_type, $req->content, $token);
         }
         return success();
@@ -119,7 +119,8 @@ sub call {
                 or return error_bad_request('hub.challenge is missing');
             my $lease = $p->{'hub.lease_seconds'}
                 or return error_bad_request('hub.lease_seconds is missing');
-            my $token = $p->{'hub.verify_token'};
+
+            $token //= $p->{'hub.verify_token'};
 
             if ($self->on_verify->($topic, $token, $mode, $lease)) {
                 return success_challenge($challenge);

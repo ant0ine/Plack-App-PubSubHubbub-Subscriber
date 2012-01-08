@@ -54,6 +54,15 @@ sub ua {
     return $self->{__ua};
 }
 
+sub _inject_token {
+    my ($url, $token) = @_;
+    $url = URI->new($url);
+    my $path = $url->path;
+    $path =~ s/\/$//;
+    $url->path($path.'/'.$token);
+    return $url->as_string;
+}
+
 sub _request {
     my $self = shift;
     my ($hub, $feed, $token, $mode) = @_;
@@ -63,11 +72,22 @@ sub _request {
         "hub.mode"          => $mode,
         "hub.topic"         => $feed,
         "hub.verify"        => $self->config->verify,
-        defined $self->config->lease_seconds ?
-            ( "hub.lease_seconds" => $self->config->lease_seconds ) : (),
-        $token ?
-            ( "hub.verify_token" => $token ) : (),
     );
+
+    if (defined $self->config->lease_seconds) {
+        $params{"hub.lease_seconds"} = $self->config->lease_seconds;
+    }
+
+    if ($token) {
+        if ($self->config->token_in_path) {
+            # overwrite the callback
+            $params{"hub.callback"} = _inject_token($self->config->callback, $token);
+        }
+        else {
+            $params{"hub.verify_token"} = $token;
+        }
+    }
+
     my $url = URI->new('http:');
     $url->query_form(%params);
     my $content = $url->query;

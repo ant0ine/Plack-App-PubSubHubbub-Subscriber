@@ -22,7 +22,7 @@ my $app = Plack::App::PubSubHubbub::Subscriber->new(
         return 1;
     },
     on_ping => sub {
-        my ($content_type, $content) = @_;
+        my ($content_type, $content, $token) = @_;
         print STDERR "$content\n";
     },
 );

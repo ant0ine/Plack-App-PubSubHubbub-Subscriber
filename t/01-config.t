@@ -1,6 +1,6 @@
 #!perl -T
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 
 use Plack::App::PubSubHubbub::Subscriber::Config;
@@ -42,6 +42,7 @@ isa_ok $conf, 'Plack::App::PubSubHubbub::Subscriber::Config';
 is $conf->callback, 'http://localhost/callback', 'same callaback';
 is $conf->verify, 'sync', 'default is sync';
 ok ! defined $conf->lease_seconds, 'lease_seconds is undef';
+ok $conf->token_in_path, 'default is true';
 
 lives_ok { $class->new(
     callback => 'http://localhost/callback',

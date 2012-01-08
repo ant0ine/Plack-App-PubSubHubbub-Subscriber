@@ -14,15 +14,22 @@ Plack::App::PubSubHubbub::Subscriber::Config
     callback => 'http://example.org/callback',
     verify => 'sync',
     lease_seconds => 86400,
+    token_in_path => 1,
  );
 
 =head1 DESCRIPTION
 
 =head2 $class->new( %args )
 
-'callback' is required, must be 'http', must not contain fragment.
-'verify' can be 'sync' or 'async', and defaults to 'sync'.
-'lease_seconds' defaults to undef
+=over 4
+
+=item * C<callback> is required, must be 'http', must not contain fragment.
+
+=item * C<verify> can be 'sync' or 'async', and defaults to 'sync'.
+
+=item * C<lease_seconds> defaults to undef.
+
+=item * C<token_in_path> defaults to 1. This puts the token in the callback URL path, and does not use the hub.verify_token argument of the query string. The main benefit is that the token also known when a ping is received.
 
 =cut
 
@@ -53,6 +60,8 @@ sub new {
     }
     $self->{lease_seconds} = $lease;
 
+    $self->{token_in_path} = $args{token_in_path} // 1;
+
     return $self;
 }
 
@@ -61,5 +70,7 @@ sub callback { $_[0]->{callback} }
 sub verify { $_[0]->{verify} }
 
 sub lease_seconds { $_[0]->{lease_seconds} }
+
+sub token_in_path { $_[0]->{token_in_path} }
 
 1;

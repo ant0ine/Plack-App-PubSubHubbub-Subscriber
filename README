@@ -22,7 +22,7 @@ SYNOPSIS
              return 1;
          },
          on_ping => sub {
-             my ($content_type, $content) = @_;
+             my ($content_type, $content, $token) = @_;
              print $content;
          },
      );
@@ -54,14 +54,18 @@ DESCRIPTION
     same config object can be use to instanciate the client
     Plack::App::PubSubHubbub::Subscriber::Client
 
-  $self->on_ping( sub { my ($content_type, $content) = @_ } )
+  $self->on_ping( sub { my ($content_type, $content, $token) = @_ } )
     Triggered when a new ping is received, the parameters are the content
-    type, and the raw content, in that order. The return value is ignore.
+    type, the raw content, and the token in that order. Note that the token
+    is available only if the configuration flag "token_in_path" is set (the
+    default). Also note that, in any case, the token is undef if you didn't
+    use a token to (un)subcribe. The return value is ignore.
 
   $self->on_verify( sub { my ($topic, $token, $mode, $lease) = @_ } )
     Triggered when a subscribe/unsubscribe request is received, the
     parameters are the topic, the token, the mode, and the number of seconds
-    of the lease, in that order. Given these parameters, this coderef must
+    of the lease, in that order. Note that the token is undef if you didn't
+    use a token to (un)subcribe. Given these parameters, this coderef must
     return 1 for verified, or 0 for rejected.
 
   $self->callback_path

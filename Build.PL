@@ -12,6 +12,9 @@ my $builder = Module::Build->new(
     build_requires => {
         'Test::More' => 0,
         'Test::Exception' => 0,
+    },
+    requires => {
+        'perl' => '5.10.0',
         'URI' => 0,
         'LWP' => 0,
         'HTTP::Message' => 0,

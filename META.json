@@ -16,24 +16,29 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "HTTP::Message" : 0,
-            "LWP" : 0,
-            "Plack" : 0,
             "Test::Exception" : 0,
-            "Test::More" : 0,
-            "URI" : 0
+            "Test::More" : 0
          }
       },
       "configure" : {
          "requires" : {
             "Module::Build" : "0.38"
          }
+      },
+      "runtime" : {
+         "requires" : {
+            "HTTP::Message" : 0,
+            "LWP" : 0,
+            "Plack" : 0,
+            "URI" : 0,
+            "perl" : "v5.10.0"
+         }
       }
    },
    "provides" : {
       "Plack::App::PubSubHubbub::Subscriber" : {
          "file" : "lib/Plack/App/PubSubHubbub/Subscriber.pm",
-         "version" : "0.1"
+         "version" : "0.2"
       },
       "Plack::App::PubSubHubbub::Subscriber::Client" : {
          "file" : "lib/Plack/App/PubSubHubbub/Subscriber/Client.pm",
@@ -50,7 +55,7 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.1",
+   "version" : "0.2",
    "x_resource" : {
       "repository" : {
          "type" : "git",

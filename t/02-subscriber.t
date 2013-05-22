@@ -1,9 +1,10 @@
 #!perl -T
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Plack::Test;
 use Plack::Builder;
 use HTTP::Request;
+use URI;
 
 use Plack::App::PubSubHubbub::Subscriber;
 use Plack::App::PubSubHubbub::Subscriber::Config;
@@ -40,4 +41,18 @@ test_psgi
         is $res->code, 200, "OK";
     };
 
-
+test_psgi
+    app => $app,
+    client => sub {
+        my $cb = shift;
+        my $uri = URI->new('http://example.tld:8081/callback/mytoken');
+        $uri->query_form(
+            'arg1'          => 1,
+            'hub.topic'     => 'http://blog.livedoor.jp/ytnobody/atom.xml',
+            'hub.challenge' => '14461605901000989736',
+            'hub.mode'      => 'unsubscribe'
+        );
+        my $req = HTTP::Request->new(GET => $uri);
+        my $res = $cb->($req);
+        is $res->code, 200, sprintf('NO MORE "hub.lease_second is missing" when unsubscribe. We got "%s"', $res->content);
+    };

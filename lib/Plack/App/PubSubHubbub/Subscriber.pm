@@ -89,6 +89,13 @@ Return the path part of the callback URL. Useful for doing "mount $app->callback
 
 =cut
 
+sub new {
+    my $class = shift;
+    my $self = $class->SUPER::new(@_); 
+    $self->on_verify(sub { 1 }) unless $self->on_verify; ### XXX fillin on_verify by default CODEREF
+    return $self;
+}
+
 sub callback_path {
     my $self = shift;
     return URI->new($self->config->callback)->path;
@@ -117,16 +124,18 @@ sub call {
                 or return error_bad_request('hub.topic is missing');
             my $challenge = $p->{'hub.challenge'}
                 or return error_bad_request('hub.challenge is missing');
-            my $lease = $p->{'hub.lease_seconds'}
-                or return error_bad_request('hub.lease_seconds is missing');
+            my $lease = $p->{'hub.lease_seconds'};
+            if (!$lease && $mode eq 'subscribe') { ### XXX lease_seconds not required when unsubscribe. Try https://pubsubhubbub.appspot.com/subscribe
+                return error_bad_request('hub.lease_seconds is missing');
+            }
 
             $token //= $p->{'hub.verify_token'};
 
-            if ($self->on_verify->($topic, $token, $mode, $lease)) {
-                return success_challenge($challenge);
+            if ($mode eq 'subscribe') {
+                return $self->on_verify->($topic, $token, $mode, $lease) ? success_challenge($challenge) : error_not_found();
             }
-            else {
-                return error_not_found();
+            else { ### XXX lease_seconds not required when unsubscribe. Try https://pubsubhubbub.appspot.com/subscribe
+                return $self->on_verify->($topic, $token, $mode) ? success_challenge($challenge) : error_not_found();
             }
         }
         else {
